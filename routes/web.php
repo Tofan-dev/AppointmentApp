@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// ALL APPOINTMENTS ROUTES
+
+
+Route::group(['prefix' => 'appointments'], function(){
+    Route::get('/', [AppointmentController::class, 'index']);
+    Route::get('/create', [AppointmentController::class, 'create']);
+    Route::post('/create', [AppointmentController::class, 'store']);
 });

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Http\Requests\StoreAppointmentRequest;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 
 class AppointmentController extends Controller
 {
@@ -11,10 +13,15 @@ class AppointmentController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\Factory
      */
     public function index()
     {
-        //
+        $appointments = Appointment::paginate(5);
+        // dd($appointments);
+        return view('appointmentsScreen', compact('appointments'));
+
     }
 
     /**
@@ -24,18 +31,29 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('appointmentCreate');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\StoreAppointmentRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAppointmentRequest $request)
     {
-        //
+        $appointment                = new Appointment;
+        $appointment->date          = $request->date;
+        $appointment->hour          = $request->hour;
+        $appointment->full_name     = $request->fullName;
+        $appointment->phone_number  = $request->phoneNumber;
+        $appointment->email         = $request->email;
+
+        
+        $appointment->save();
+        dd($appointment);
+
+        return redirect('/appointments')->with('successMsg', 'Appointment successfully created.');
     }
 
     /**
