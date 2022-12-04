@@ -7,11 +7,12 @@
 
     <title>Create Appointment</title>
 
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -407,14 +408,15 @@
             @endif
 
         </div>
-        <div class="container pt-4">
+        <div class="container">
+            <a href="/appointments" class="btn btn-primary">Back</a>
             <h1>Create new appointment</h1>
-            <form action="/appointments/create" method="POST" enctype="multipart/form-data">
+            <form id="create" action="{{route('appointment.create')}}" method="POST" enctype="multipart/form-data">
                 @method('POST')
                 @csrf
                 <div class="form-group">
                     <label for="date">Date</label>
-                    <input type="date" name="date" data-date-format="DD MMMM YYYY" class="form-control">
+                    <input type="date" name="date" format="DD/MM/YYYY" placeholder="DD/MM/YYYY" class="form-control">
                     @error('date')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -452,11 +454,45 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="submit" class="submit btn btn-primary">Create</button>
             </form>
         </div>
-
     </main>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function(){
+            $(document).on('click', 'submit', function(e){
+                e.preventDefault();
+                
+                var data = {
+                    'date': $('input[name="date"]').val(),
+                    'hour': $('input[name="hour"]').val(),
+                    'fullName': $('input[name="fullName"]').val(),
+                    'phoneNumber': $('input[name="phoneNumber"]').val(),
+                    'email': $('input[name="email"]').val(),
+                }
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/create",
+                    data: data,
+                    dataType: "json",
+                    success: function(response){
+                        console.log(response);
+                    }
+                })
+
+            });
+        });
+        
+    </script>
 </body>
 
 </html>

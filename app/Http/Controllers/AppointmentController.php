@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Http\Requests\StoreAppointmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class AppointmentController extends Controller
 {
@@ -31,29 +32,45 @@ class AppointmentController extends Controller
      */
     public function create()
     {
-        return view('appointmentCreate');
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreAppointmentRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreAppointmentRequest $request)
+    public function store(Request $request)
     {
-        $appointment                = new Appointment;
-        $appointment->date          = $request->date;
-        $appointment->hour          = $request->hour;
-        $appointment->full_name     = $request->fullName;
-        $appointment->phone_number  = $request->phoneNumber;
-        $appointment->email         = $request->email;
+        $validator = Validator::make($request->all(),[
+            'date'          => 'required',
+            'hour'          => 'required',
+            'fullName'     => 'required|max:50',
+            'phoneNumber'  => 'required',
+            'email'         => 'required|max:255',
+        ]);
 
+        if($validator->fails()){
+            return response()->json(['status'=>400, 'errors'=>$validator->messages(),]);
+        }
+        else{
+
+            $appointment                = new Appointment;
+            $appointment->date          = $request->date;
+            $appointment->hour          = $request->hour;
+            $appointment->full_name     = $request->fullName;
+            $appointment->phone_number  = $request->phoneNumber;
+            $appointment->email         = $request->email;
         
         $appointment->save();
-        dd($appointment);
+        
+        return response()->json([
+            'message'=>'Success',
+        ]);
+        
+            }
 
-        return redirect('/appointments')->with('successMsg', 'Appointment successfully created.');
     }
 
     /**

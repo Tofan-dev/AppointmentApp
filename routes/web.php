@@ -20,9 +20,10 @@ Route::get('/', function () {
 
 // ALL APPOINTMENTS ROUTES
 
+    Route::get('/appointments', [AppointmentController::class, 'index']);
 
-Route::group(['prefix' => 'appointments'], function(){
-    Route::get('/', [AppointmentController::class, 'index']);
-    Route::get('/create', [AppointmentController::class, 'create']);
-    Route::post('/create', [AppointmentController::class, 'store']);
+    Route::get('/create', function () {
+        return view('appointmentCreate');
 });
+
+    Route::post('/create', [AppointmentController::class, 'store'])->name("appointment.create");

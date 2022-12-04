@@ -32,9 +32,7 @@
         @endif
         <div class="container pt-4">
             <div class="container pt-4">
-                <form action="appointments/create" method="GET">
-                    <button class="btn btn-primary" type="submit">Create appointment</button>
-                </form>
+                    <a href="create" class="btn btn-primary">Create appointment </a>
                 <br>
                 <h1>All appointments</h1>
                 <table class="table">
