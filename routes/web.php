@@ -14,16 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 // ALL APPOINTMENTS ROUTES
 
-    Route::get('/appointments', [AppointmentController::class, 'index']);
-
+    Route::get('/', [AppointmentController::class, 'index']);
+    
     Route::get('/create', function () {
         return view('appointmentCreate');
-});
-
+    });
+    
     Route::post('/create', [AppointmentController::class, 'store'])->name("appointment.create");
+    
+    Route::get('/selectBy/{date}', [AppointmentController::class, 'getAppointmentsByDate']);
+
+    Route::delete('/delete/{id}', [AppointmentController::class, 'destroy']);

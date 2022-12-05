@@ -7,6 +7,7 @@ use App\Http\Requests\StoreAppointmentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class AppointmentController extends Controller
 {
@@ -44,18 +45,17 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'date'          => 'required',
-            'hour'          => 'required',
+            'date'         => 'required',
+            'hour'         => 'required',
             'fullName'     => 'required|max:50',
             'phoneNumber'  => 'required',
-            'email'         => 'required|max:255',
+            'email'        => 'required|max:255',
         ]);
 
         if($validator->fails()){
-            return response()->json(['status'=>400, 'errors'=>$validator->messages(),]);
+            return redirect('/create')->with('errorMsg', 'All fields are required.');
         }
         else{
-
             $appointment                = new Appointment;
             $appointment->date          = $request->date;
             $appointment->hour          = $request->hour;
@@ -65,12 +65,8 @@ class AppointmentController extends Controller
         
         $appointment->save();
         
-        return response()->json([
-            'message'=>'Success',
-        ]);
-        
-            }
-
+        return redirect('/')->with('successMsg', 'Product successfully added.');
+     }
     }
 
     /**
@@ -113,8 +109,34 @@ class AppointmentController extends Controller
      * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Appointment $appointment)
+    public function destroy($id)
     {
-        //
+        $appointment = Appointment::find($id);
+
+        if($appointment){
+            $appointment->delete();
+        }
+
+        return redirect('/')->with('successMsg', 'Appointment successfully deleted.');
+
+    }
+
+   /**
+    * Get apointments by column value
+    * @param string $value
+    * @return \Illuminate\Http\Response
+    */
+
+    public function getAppointmentsByDate(string $value)
+    {
+        // $appointments = DB::select('select hour from appointments WHERE date = ?', [$value]);
+        $hours = DB::table('appointments')
+            ->select('hour')
+            ->where('date', $value)
+            ->get();
+
+        return response()->json([
+            'hours'=>$hours,
+        ]);
     }
 }
