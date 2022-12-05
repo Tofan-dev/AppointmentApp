@@ -1,3 +1,10 @@
+![Screenshot_1](https://user-images.githubusercontent.com/75756489/205729202-e0a425a7-0a17-4987-9b5f-2bc13b665e1d.png)
+
+
+## You can check out my video presentation of the project here
+
+https://youtu.be/KhlUIWLIV_8
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
@@ -7,12 +14,6 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-![Screenshot_1](https://user-images.githubusercontent.com/75756489/205729202-e0a425a7-0a17-4987-9b5f-2bc13b665e1d.png)
-
-
-## You can check out my video presentation of the project here
-
-https://youtu.be/KhlUIWLIV_8
 
 ## About Laravel
 
